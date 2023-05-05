@@ -2,6 +2,8 @@ package com.example.ukrposhtatest.model;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,5 +20,15 @@ public class Project {
     private String name;
     private String description;
     private LocalDate deadline;
-    private String stage;
+    @Enumerated(value = EnumType.STRING)
+    private Stage stage;
+
+    public enum Stage {
+        CONCEPT,
+        DESIGN,
+        DEVELOPMENT,
+        TESTING,
+        DEPLOYMENT,
+        MAINTENANCE
+    }
 }
