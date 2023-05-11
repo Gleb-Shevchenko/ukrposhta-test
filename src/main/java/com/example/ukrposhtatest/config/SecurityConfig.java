@@ -29,17 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/cinema-halls/**",
-                        "/movies/**", "/movie-sessions/available").hasAnyRole(ADMIN, USER)
-                .antMatchers(HttpMethod.POST, "/cinema-halls/**",
-                        "/movies/**", "/movie-sessions/**").hasRole(ADMIN)
-                .antMatchers(HttpMethod.PUT, "/movie-sessions/{id}").hasRole(ADMIN)
-                .antMatchers(HttpMethod.DELETE, "/movie-sessions/{id}").hasRole(ADMIN)
-                .antMatchers(HttpMethod.GET, "/orders/**").hasRole(USER)
-                .antMatchers(HttpMethod.POST, "/orders/complete").hasRole(USER)
-                .antMatchers(HttpMethod.PUT, "/shopping-carts/movie-sessions").hasRole(USER)
-                .antMatchers(HttpMethod.GET, "/shopping-carts/by-user").hasRole(USER)
-                .antMatchers(HttpMethod.GET, "/users/by-email").hasRole(ADMIN)
+                .antMatchers(HttpMethod.GET, "/managers/all", "/programmers/all").hasRole(ADMIN)
+                .antMatchers(HttpMethod.DELETE, "/managers/**").hasRole(ADMIN)
+                .antMatchers(HttpMethod.PUT, "/managers/**").hasRole(ADMIN)
+                .antMatchers(HttpMethod.GET, "/managers/{id}", "/managers/all/**").hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.GET, "/programmers/{id}",
+                        "programmers/all/**").hasAnyRole(ADMIN, PROGRAMMER)
+                .antMatchers(HttpMethod.POST, "/projects/**",
+                        "/teams/**", "/sprints/**").hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.PATCH, "/projects/**",
+                        "/teams/**", "/sprints/**").hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.DELETE, "/projects/**",
+                        "/teams/**", "/sprints/**").hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.GET, "/projects/**",
+                        "/teams/**", "/sprints/**").hasAnyRole(ADMIN, MANAGER, PROGRAMMER)
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
