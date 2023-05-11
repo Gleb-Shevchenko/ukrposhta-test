@@ -6,6 +6,7 @@ import com.example.ukrposhtatest.service.ProgrammerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -27,5 +28,10 @@ public class ProgrammerServiceImpl implements ProgrammerService {
     @Override
     public void deleteById(Long id) {
         programmerRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Programmer> findAll() {
+        return programmerRepository.findAll();
     }
 }

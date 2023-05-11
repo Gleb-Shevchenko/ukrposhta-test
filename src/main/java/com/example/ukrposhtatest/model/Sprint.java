@@ -1,13 +1,10 @@
 package com.example.ukrposhtatest.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import java.time.LocalDate;
+import javax.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "sprints")
 public class Sprint {
@@ -19,6 +16,15 @@ public class Sprint {
     @OneToOne
     private Project project;
     private LocalDate deadline;
-    @OneToOne
+    @ManyToOne
     private Programmer programmer;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ASSIGNED,
+        PROCESSING,
+        CHECK,
+        DONE
+    }
 }

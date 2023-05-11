@@ -1,10 +1,7 @@
 package com.example.ukrposhtatest.model;
 
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +14,8 @@ public class Programmer extends Employee {
     private Level level;
     @Enumerated(value = EnumType.STRING)
     private Type type;
+    @OneToMany(mappedBy = "programmers")
+    private List<Sprint> sprints;
 
     public Programmer(String name, List<Project> projects, List<Team> teams,
                       Level level, Type type) {

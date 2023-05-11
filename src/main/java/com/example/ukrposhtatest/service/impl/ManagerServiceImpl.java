@@ -3,6 +3,8 @@ package com.example.ukrposhtatest.service.impl;
 import com.example.ukrposhtatest.model.Manager;
 import com.example.ukrposhtatest.repository.ManagerRepository;
 import com.example.ukrposhtatest.service.ManagerService;
+
+import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,5 +28,10 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void deleteById(Long id) {
         managerRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Manager> findAll() {
+        return managerRepository.findAll();
     }
 }

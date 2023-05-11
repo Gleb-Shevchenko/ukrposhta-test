@@ -9,10 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.*;
 
 @Data
 @Entity
 @Table(name = "projects")
+@SQLDelete(sql = "UPDATE table_product SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedProductFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedProductFilter", condition = "deleted = :isDeleted")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +26,7 @@ public class Project {
     private LocalDate deadline;
     @Enumerated(value = EnumType.STRING)
     private Stage stage;
+    private boolean deleted = Boolean.FALSE;
 
     public enum Stage {
         CONCEPT,
