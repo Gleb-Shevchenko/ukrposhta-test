@@ -3,6 +3,8 @@ package com.example.ukrposhtatest.controller;
 import com.example.ukrposhtatest.dto.mapper.RequestDtoMapper;
 import com.example.ukrposhtatest.dto.mapper.ResponseDtoMapper;
 import com.example.ukrposhtatest.dto.request.TeamRequestDto;
+import com.example.ukrposhtatest.dto.response.ManagerResponseDto;
+import com.example.ukrposhtatest.dto.response.ProgrammerResponseDto;
 import com.example.ukrposhtatest.dto.response.TeamResponseDto;
 import com.example.ukrposhtatest.model.Manager;
 import com.example.ukrposhtatest.model.Programmer;
@@ -11,6 +13,7 @@ import com.example.ukrposhtatest.model.Team;
 import com.example.ukrposhtatest.service.ManagerService;
 import com.example.ukrposhtatest.service.ProgrammerService;
 import com.example.ukrposhtatest.service.TeamService;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,10 @@ public class TeamController {
             teamRequestDtoMapper;
     private final ResponseDtoMapper<TeamResponseDto, Team>
             teamResponseDtoMapper;
+    private final ResponseDtoMapper<ManagerResponseDto, Manager>
+            managerResponseDtoMapper;
+    private final ResponseDtoMapper<ProgrammerResponseDto, Programmer>
+            programmerResponseDtoMapper;
 
     @PostMapping
     public TeamResponseDto save(@RequestBody TeamRequestDto teamRequestDto) {
@@ -113,5 +120,29 @@ public class TeamController {
         team.getProgrammers().remove(programmer);
         teamService.save(team);
         return teamResponseDtoMapper.mapToDto(team);
+    }
+
+    @GetMapping("/all")
+    public List<TeamResponseDto> findAll() {
+        return teamService.findAll()
+                .stream()
+                .map(teamResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/managers")
+    public List<ManagerResponseDto> findAllManagersById(@PathVariable Long id) {
+        return teamService.findAllManagersById(id)
+                .stream()
+                .map(managerResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/programmers")
+    public List<ProgrammerResponseDto> findAllProgrammersById(@PathVariable Long id) {
+        return teamService.findAllProgrammersById(id)
+                .stream()
+                .map(programmerResponseDtoMapper::mapToDto)
+                .toList();
     }
 }

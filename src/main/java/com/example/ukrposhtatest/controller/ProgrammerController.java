@@ -4,7 +4,13 @@ import com.example.ukrposhtatest.dto.mapper.RequestDtoMapper;
 import com.example.ukrposhtatest.dto.mapper.ResponseDtoMapper;
 import com.example.ukrposhtatest.dto.request.ProgrammerRequestDto;
 import com.example.ukrposhtatest.dto.response.ProgrammerResponseDto;
+import com.example.ukrposhtatest.dto.response.ProjectResponseDto;
+import com.example.ukrposhtatest.dto.response.SprintResponseDto;
+import com.example.ukrposhtatest.dto.response.TeamResponseDto;
 import com.example.ukrposhtatest.model.Programmer;
+import com.example.ukrposhtatest.model.Project;
+import com.example.ukrposhtatest.model.Sprint;
+import com.example.ukrposhtatest.model.Team;
 import com.example.ukrposhtatest.service.ProgrammerService;
 import com.example.ukrposhtatest.service.SprintService;
 import com.example.ukrposhtatest.service.TeamService;
@@ -19,17 +25,14 @@ public class ProgrammerController {
     private final ProgrammerService programmerService;
     private final SprintService sprintService;
     private final TeamService teamService;
-    private final RequestDtoMapper<ProgrammerRequestDto, Programmer>
-            programmerRequestDtoMapper;
     private final ResponseDtoMapper<ProgrammerResponseDto, Programmer>
             programmerResponseDtoMapper;
-
-    @PostMapping
-    public ProgrammerResponseDto save(@RequestBody ProgrammerRequestDto programmerRequestDto) {
-        Programmer programmer = programmerService
-                .save(programmerRequestDtoMapper.mapToModel(programmerRequestDto));
-        return programmerResponseDtoMapper.mapToDto(programmer);
-    }
+    private final ResponseDtoMapper<ProjectResponseDto, Project>
+            projectResponseDtoMapper;
+    private final ResponseDtoMapper<TeamResponseDto, Team>
+            teamResponseDtoMapper;
+    private final ResponseDtoMapper<SprintResponseDto, Sprint>
+            sprintResponseDtoMapper;
 
     @GetMapping("/{id}")
     public ProgrammerResponseDto findById(@PathVariable Long id) {
@@ -55,11 +58,8 @@ public class ProgrammerController {
                                         @RequestBody ProgrammerRequestDto programmerRequestDto) {
         Programmer programmer = programmerService.findById(id);
         programmer.setName(programmerRequestDto.getName());
-        programmer.setTeams(programmerRequestDto.getTeams());
-        programmer.setProjects(programmerRequestDto.getProjects());
         programmer.setLevel(programmerRequestDto.getLevel());
         programmer.setType(programmerRequestDto.getType());
-        programmer.setSprints(programmerRequestDto.getSprints());
         programmerService.save(programmer);
         return programmerResponseDtoMapper.mapToDto(programmer);
     }
@@ -69,6 +69,30 @@ public class ProgrammerController {
         return programmerService.findAll()
                 .stream()
                 .map(programmerResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/projects")
+    public List<ProjectResponseDto> findAllProjectsById(@PathVariable Long id) {
+        return programmerService.findAllProjectsById(id)
+                .stream()
+                .map(projectResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/teams")
+    public List<TeamResponseDto> findAllTeamsById(@PathVariable Long id) {
+        return programmerService.findAllTeamsById(id)
+                .stream()
+                .map(teamResponseDtoMapper::mapToDto)
+                .toList();
+    }
+    
+    @GetMapping("/all/sprints")
+    public List<SprintResponseDto> findAllSprintsById(@PathVariable Long id) {
+        return programmerService.findAllSprintsById(id)
+                .stream()
+                .map(sprintResponseDtoMapper::mapToDto)
                 .toList();
     }
 }

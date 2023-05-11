@@ -12,7 +12,7 @@ import lombok.Data;
         message = "Passwords do not match!"
 )
 @Data
-public class ManagerRequestDto {
+public class ManagerRequestDto extends UserRequestDto {
     @NotNull(message = "Name can't be null")
     private String name;
     @ValidEmail

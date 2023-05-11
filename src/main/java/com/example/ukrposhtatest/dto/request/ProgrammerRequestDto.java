@@ -3,9 +3,6 @@ package com.example.ukrposhtatest.dto.request;
 import com.example.ukrposhtatest.lib.FieldsValueMatch;
 import com.example.ukrposhtatest.lib.ValidEmail;
 import com.example.ukrposhtatest.model.*;
-
-import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -16,7 +13,7 @@ import lombok.Data;
         message = "Passwords do not match!"
 )
 @Data
-public class ProgrammerRequestDto {
+public class ProgrammerRequestDto extends UserRequestDto {
     @NotNull(message = "Name can't be null")
     private String name;
     @ValidEmail

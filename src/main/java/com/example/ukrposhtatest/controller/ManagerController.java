@@ -1,10 +1,13 @@
 package com.example.ukrposhtatest.controller;
 
-import com.example.ukrposhtatest.dto.mapper.RequestDtoMapper;
 import com.example.ukrposhtatest.dto.mapper.ResponseDtoMapper;
 import com.example.ukrposhtatest.dto.request.ManagerRequestDto;
 import com.example.ukrposhtatest.dto.response.ManagerResponseDto;
+import com.example.ukrposhtatest.dto.response.ProjectResponseDto;
+import com.example.ukrposhtatest.dto.response.TeamResponseDto;
 import com.example.ukrposhtatest.model.Manager;
+import com.example.ukrposhtatest.model.Project;
+import com.example.ukrposhtatest.model.Team;
 import com.example.ukrposhtatest.service.ManagerService;
 import com.example.ukrposhtatest.service.TeamService;
 import java.util.List;
@@ -17,16 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerController {
     private final ManagerService managerService;
     private final TeamService teamService;
-    private final RequestDtoMapper<ManagerRequestDto, Manager>
-            managerRequestDtoMapper;
     private final ResponseDtoMapper<ManagerResponseDto, Manager>
             managerResponseDtoMapper;
-
-    @PostMapping
-    public ManagerResponseDto save(@RequestBody ManagerRequestDto managerRequestDto) {
-        Manager manager = managerService.save(managerRequestDtoMapper.mapToModel(managerRequestDto));
-        return managerResponseDtoMapper.mapToDto(manager);
-    }
+    private final ResponseDtoMapper<ProjectResponseDto, Project>
+            projectResponseDtoMapper;
+    private final ResponseDtoMapper<TeamResponseDto, Team>
+            teamResponseDtoMapper;
 
     @GetMapping("/{id}")
     public ManagerResponseDto findById(@PathVariable Long id) {
@@ -49,8 +48,6 @@ public class ManagerController {
                                      @RequestBody ManagerRequestDto managerRequestDto) {
         Manager manager = managerService.findById(id);
         manager.setName(managerRequestDto.getName());
-        manager.setProjects(managerRequestDto.getProjects());
-        manager.setTeams(managerRequestDto.getTeams());
         managerService.save(manager);
         return managerResponseDtoMapper.mapToDto(manager);
     }
@@ -60,6 +57,22 @@ public class ManagerController {
         return managerService.findAll()
                 .stream()
                 .map(managerResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/projects")
+    public List<ProjectResponseDto> findAllProjectsById(@PathVariable Long id) {
+        return managerService.findAllProjectsById(id)
+                .stream()
+                .map(projectResponseDtoMapper::mapToDto)
+                .toList();
+    }
+
+    @GetMapping("/all/teams")
+    public List<TeamResponseDto> findAllTeamsById(@PathVariable Long id) {
+        return managerService.findAllTeamsById(id)
+                .stream()
+                .map(teamResponseDtoMapper::mapToDto)
                 .toList();
     }
 }

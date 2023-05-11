@@ -1,6 +1,8 @@
 package com.example.ukrposhtatest.service.impl;
 
 import com.example.ukrposhtatest.model.Manager;
+import com.example.ukrposhtatest.model.Project;
+import com.example.ukrposhtatest.model.Team;
 import com.example.ukrposhtatest.repository.ManagerRepository;
 import com.example.ukrposhtatest.service.ManagerService;
 
@@ -33,5 +35,19 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public List<Manager> findAll() {
         return managerRepository.findAll();
+    }
+
+    @Override
+    public List<Project> findAllProjectsById(Long id) {
+        Manager manager = managerRepository.findById(id).orElseThrow(()
+                -> new NoSuchElementException("Can't find manager by id: " + id));
+        return manager.getProjects();
+    }
+
+    @Override
+    public List<Team> findAllTeamsById(Long id) {
+        Manager manager = managerRepository.findById(id).orElseThrow(()
+                -> new NoSuchElementException("Can't find manager by id: " + id));
+        return manager.getTeams();
     }
 }
